@@ -19,6 +19,11 @@ const profilePageStyle = {
     color: "#828282",
     textAlign: "center !important",
   },
+  projectSubTitle: {
+    maxWidth: "600px",
+    color: "#828282",
+    textAlign: "center !important",
+  },
   name: {
     marginTop: "-80px",
   },
