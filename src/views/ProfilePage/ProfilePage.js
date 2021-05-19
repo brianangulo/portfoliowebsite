@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -16,8 +16,17 @@ import GridItem from "components/Grid/GridItem.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import NavPills from "components/NavPills/NavPills.js";
 import Parallax from "components/Parallax/Parallax.js";
+import CustomInput from "components/CustomInput/CustomInput.js";
 
 import profile from "assets/img/faces/memoji.png";
+
+//Projects screenshots
+import ebank from "assets/img/projects/ebank.png";
+import gpu from "assets/img/projects/gpu.png";
+import brute from "assets/img/projects/bf.png";
+
+//Hovering library
+import { AnimationWrapper } from "react-hover-animation";
 
 import studio1 from "assets/img/examples/studio-1.jpg";
 import studio2 from "assets/img/examples/studio-2.jpg";
@@ -43,6 +52,14 @@ export default function ProfilePage(props) {
     classes.imgFluid
   );
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
+
+  //State hooks
+  const [contactName, setContactName] = useState();
+  const [contactEmail, setContactEmail] = useState();
+  const [contactText, setContactText] = useState();
+
+  //Node Mailer to come here below --->>
+
   return (
     <div>
       <Header
@@ -124,7 +141,7 @@ export default function ProfilePage(props) {
               <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
                 <NavPills
                   alignCenter
-                  color="danger"
+                  color="warning"
                   tabs={[
                     {
                       tabButton: "Live Projects",
@@ -132,28 +149,56 @@ export default function ProfilePage(props) {
                       tabContent: (
                         <GridContainer justify="center">
                           <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={studio1}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={studio2}
-                              className={navImageClasses}
-                            />
+                            <AnimationWrapper>
+                              <a
+                                target="_blank"
+                                href="https://everyones-bank.netlify.app/"
+                              >
+                                <img
+                                  alt="Screenshot of Everyone's Bank Project"
+                                  src={ebank}
+                                  className={navImageClasses}
+                                />
+                              </a>
+                            </AnimationWrapper>
+                            <p className={classes.projectSubTitle}>
+                              Website for a fictional bank. Built mostly with
+                              BootStrap, jQuery and SCSS.
+                            </p>
+                            <AnimationWrapper>
+                              <a
+                                target="_blank"
+                                href="https://bruteforceit.netlify.app/?"
+                              >
+                                <img
+                                  alt="Screenshot of BruteForce It Project"
+                                  src={brute}
+                                  className={navImageClasses}
+                                />
+                              </a>{" "}
+                            </AnimationWrapper>
+                            <p className={classes.projectSubTitle}>
+                              Fun website that will test the brute-force
+                              resistance of your passwords. Built with
+                              React/Redux
+                            </p>
                           </GridItem>
                           <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={studio5}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={studio4}
-                              className={navImageClasses}
-                            />
+                            <AnimationWrapper>
+                              <a
+                                target="_blank"
+                                href="https://play.google.com/store/apps/details?id=com.gputrackit.gputrackit"
+                              >
+                                <img
+                                  alt="Screenshot of GPUTrackIT App Project"
+                                  src={gpu}
+                                  className={navImageClasses}
+                                />
+                              </a>{" "}
+                            </AnimationWrapper>
+                            <p className={classes.projectSubTitle}>
+                              GPUTrackIt Android App Built with React Native
+                            </p>
                           </GridItem>
                         </GridContainer>
                       ),
@@ -164,33 +209,53 @@ export default function ProfilePage(props) {
                       tabContent: (
                         <GridContainer justify="center">
                           <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work1}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={work2}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={work3}
-                              className={navImageClasses}
-                            />
+                            <AnimationWrapper>
+                              <a
+                                target="_blank"
+                                href="https://github.com/brianangulo/everyonesbankproject"
+                              >
+                                <img
+                                  alt="Screenshot of Everyone's Bank Project"
+                                  src={ebank}
+                                  className={navImageClasses}
+                                />
+                              </a>
+                            </AnimationWrapper>
+                            <p className={classes.projectSubTitle}>
+                              Everyone's Bank Github Repo
+                            </p>
+                            <AnimationWrapper>
+                              <a
+                                target="_blank"
+                                href="https://github.com/brianangulo/bruteforcerer"
+                              >
+                                <img
+                                  alt="Screenshot of BruteForce It Project"
+                                  src={brute}
+                                  className={navImageClasses}
+                                />
+                              </a>{" "}
+                            </AnimationWrapper>
+                            <p className={classes.projectSubTitle}>
+                              Brute Force It Github Repo
+                            </p>
                           </GridItem>
                           <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work4}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={work5}
-                              className={navImageClasses}
-                            />
+                            <AnimationWrapper>
+                              <a
+                                target="_blank"
+                                href="https://github.com/brianangulo/gputrackIT"
+                              >
+                                <img
+                                  alt="Screenshot of GPUTrackIT App Project"
+                                  src={gpu}
+                                  className={navImageClasses}
+                                />
+                              </a>{" "}
+                            </AnimationWrapper>
+                            <p className={classes.projectSubTitle}>
+                              GPUTrackIT Github Repo
+                            </p>
                           </GridItem>
                         </GridContainer>
                       ),
@@ -200,34 +265,50 @@ export default function ProfilePage(props) {
                       tabIcon: ContactMailIcon,
                       tabContent: (
                         <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work4}
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src={studio3}
-                              className={navImageClasses}
+                          <GridItem xs={12} sm={12} md={6}>
+                            <CustomInput
+                              labelText="Your Name"
+                              id="name"
+                              formControlProps={{
+                                fullWidth: true,
+                              }}
+                              inputProps={{
+                                onChange: (value) => {
+                                  setContactName(value.target.value);
+                                  console.log(contactName);
+                                },
+                              }}
                             />
                           </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src={work2}
-                              className={navImageClasses}
+                          <GridItem xs={12} sm={12} md={6}>
+                            <CustomInput
+                              labelText="Your Email"
+                              id="email"
+                              formControlProps={{
+                                fullWidth: true,
+                              }}
                             />
-                            <img
-                              alt="..."
-                              src={work1}
-                              className={navImageClasses}
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={6}>
+                            <CustomInput
+                              labelText="Your Message"
+                              id="message"
+                              formControlProps={{
+                                fullWidth: true,
+                                className: classes.textArea,
+                              }}
+                              inputProps={{
+                                multiline: true,
+                                rows: 5,
+                                onChange: (value) => {
+                                  setContactText(value.target.value);
+                                  console.log(contactText);
+                                },
+                              }}
                             />
-                            <img
-                              alt="..."
-                              src={studio1}
-                              className={navImageClasses}
-                            />
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={6}>
+                            <Button color="warning">Send Message</Button>
                           </GridItem>
                         </GridContainer>
                       ),
