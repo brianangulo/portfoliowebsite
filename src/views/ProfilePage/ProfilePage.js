@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -20,6 +20,10 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 
 import profile from "assets/img/faces/memoji.png";
 
+//Toastyyy -toast notifications
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 //Projects screenshots
 import ebank from "assets/img/projects/ebank.png";
 import gpu from "assets/img/projects/gpu.png";
@@ -28,8 +32,16 @@ import brute from "assets/img/projects/bf.png";
 //Hovering library
 import { AnimationWrapper } from "react-hover-animation";
 
+//firebase imports
+import { db } from "../../firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/analytics";
+
 //material styles
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
+import { node } from "prop-types";
 
 const useStyles = makeStyles(styles);
 
@@ -52,12 +64,41 @@ export default function ProfilePage(props) {
   //regex email validator
   const regex = /.{1,}@[^.]{1,}/;
 
-  //handling the submit of contactform
+  //handling the submit of contactform with some firebase
   const handleSubmit = () => {
-    setContactName("");
-    setContactEmail("");
-    setContactText("");
-  }
+    db.collection("texts")
+      .add({
+        timestamp: firebase.firestore.Timestamp.now(),
+        name: contactName,
+        email: contactEmail,
+        text: contactText,
+      })
+      .then(() => {
+        toast.warn("Form submitted!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+        });
+        setContactName("");
+        setContactEmail("");
+        setContactText("");
+      })
+      .catch((error) => {
+        toast.error(`Error encountered, ${error}`, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  };
 
   return (
     <div>
@@ -80,6 +121,7 @@ export default function ProfilePage(props) {
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div>
           <div className={classes.container}>
+            <ToastContainer />
             <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
@@ -274,7 +316,7 @@ export default function ProfilePage(props) {
                               inputProps={{
                                 value: contactName,
                                 onChange: (value) => {
-                                  setContactName(value.target.value)
+                                  setContactName(value.target.value);
                                 },
                               }}
                             />
@@ -283,6 +325,7 @@ export default function ProfilePage(props) {
                             <CustomInput
                               labelText="Your Email"
                               id="email"
+                              title="Format: <john@doe.com>"
                               formControlProps={{
                                 fullWidth: true,
                               }}
@@ -290,10 +333,10 @@ export default function ProfilePage(props) {
                                 onChange: (value) => {
                                   setContactEmail(value.target.value);
                                   setEmailValidator(!regex.test(contactEmail));
-                              },
+                                },
                                 value: contactEmail,
                                 error: emailValidator,
-                            }}
+                              }}
                             />
                           </GridItem>
                           <GridItem xs={12} sm={12} md={12}>
@@ -315,7 +358,9 @@ export default function ProfilePage(props) {
                             />
                           </GridItem>
                           <GridItem xs={12} sm={12} md={6}>
-                            <Button color="warning" onClick={handleSubmit}>Send Message</Button>
+                            <Button color="warning" onClick={handleSubmit}>
+                              Send Message
+                            </Button>
                           </GridItem>
                         </GridContainer>
                       ),
