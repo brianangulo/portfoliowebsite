@@ -305,7 +305,6 @@ export default function ProfilePage(props) {
                                 value: contactText,
                                 onChange: (value) => {
                                   setContactText(value.target.value);
-                                  handleSubmitValidation();
                                 },
                               }}
                             />
