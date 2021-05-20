@@ -28,17 +28,7 @@ import brute from "assets/img/projects/bf.png";
 //Hovering library
 import { AnimationWrapper } from "react-hover-animation";
 
-import studio1 from "assets/img/examples/studio-1.jpg";
-import studio2 from "assets/img/examples/studio-2.jpg";
-import studio3 from "assets/img/examples/studio-3.jpg";
-import studio4 from "assets/img/examples/studio-4.jpg";
-import studio5 from "assets/img/examples/studio-5.jpg";
-import work1 from "assets/img/examples/olu-eletu.jpg";
-import work2 from "assets/img/examples/clem-onojeghuo.jpg";
-import work3 from "assets/img/examples/cynthia-del-rio.jpg";
-import work4 from "assets/img/examples/mariya-georgieva.jpg";
-import work5 from "assets/img/examples/clem-onojegaw.jpg";
-
+//material styles
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
 
 const useStyles = makeStyles(styles);
@@ -54,9 +44,13 @@ export default function ProfilePage(props) {
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
   //State hooks
-  const [contactName, setContactName] = useState();
-  const [contactEmail, setContactEmail] = useState();
-  const [contactText, setContactText] = useState();
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactText, setContactText] = useState("");
+  const [emailValidator, setEmailValidator] = useState(false);
+
+  //regex email validator
+  const regex = /.{1,}@[^.]{1,}/;
 
   //Node Mailer to come here below --->>
 
@@ -273,9 +267,9 @@ export default function ProfilePage(props) {
                                 fullWidth: true,
                               }}
                               inputProps={{
+                                value: contactName,
                                 onChange: (value) => {
-                                  setContactName(value.target.value);
-                                  console.log(contactName);
+                                  setContactName(value.target.value)
                                 },
                               }}
                             />
@@ -287,9 +281,17 @@ export default function ProfilePage(props) {
                               formControlProps={{
                                 fullWidth: true,
                               }}
+                              inputProps={{
+                                onChange: (value) => {
+                                  setContactEmail(value.target.value);
+                                  setEmailValidator(!regex.test(contactEmail));
+                              },
+                                value: contactEmail,
+                                error: emailValidator,
+                            }}
                             />
                           </GridItem>
-                          <GridItem xs={12} sm={12} md={6}>
+                          <GridItem xs={12} sm={12} md={12}>
                             <CustomInput
                               labelText="Your Message"
                               id="message"
@@ -300,9 +302,10 @@ export default function ProfilePage(props) {
                               inputProps={{
                                 multiline: true,
                                 rows: 5,
+                                value: contactText,
                                 onChange: (value) => {
                                   setContactText(value.target.value);
-                                  console.log(contactText);
+                                  handleSubmitValidation();
                                 },
                               }}
                             />
