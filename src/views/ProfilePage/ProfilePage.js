@@ -20,9 +20,6 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 
 import profile from "assets/img/faces/memoji.png";
 
-//Importing nodemailer async function
-import { main } from "../../nodeMailer";
-
 //Projects screenshots
 import ebank from "assets/img/projects/ebank.png";
 import gpu from "assets/img/projects/gpu.png";
@@ -55,45 +52,8 @@ export default function ProfilePage(props) {
   //regex email validator
   const regex = /.{1,}@[^.]{1,}/;
 
-  //nodemaile5r
-  "use strict";
-  const nodemailer = require("nodemailer");
-
-  // async..await is not allowed in global scope, must use a wrapper
-   async function main() {
-    // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: "brianportfolio219@gmail.com", // generated ethereal user
-        pass: "", // generated ethereal password
-      },
-    });
-
-    // send mail with defined transport object
-    let info = await transporter.sendMail({
-      from: '"Fred Foo 👻" brianportfolio219@gmail.com', // sender address
-      to: "bangulo219@gmail.com", // list of receivers
-      subject: "Hello ✔", // Subject line
-      text: "Hello world?", // plain text body
-      html: "<b>Hello world?</b>", // html body
-    });
-
-    console.log("Message sent: %s", info.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-    // Preview only available when sending through an Ethereal account
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-  }
-
-  main().catch(console.error);
-
   //handling the submit of contactform
   const handleSubmit = () => {
-    main();
     setContactName("");
     setContactEmail("");
     setContactText("");
