@@ -3,3 +3,4 @@ Documentation
 .DS_Store
 .env
 config.js
+src/assets/.DS_Store
