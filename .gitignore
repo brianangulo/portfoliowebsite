@@ -4,3 +4,4 @@ Documentation
 .env
 config.js
 src/assets/.DS_Store
+build
