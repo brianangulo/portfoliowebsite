@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -41,18 +41,12 @@ import "firebase/analytics";
 
 //material styles
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
-import { node } from "prop-types";
 
 const useStyles = makeStyles(styles);
 
 export default function ProfilePage(props) {
   const classes = useStyles();
   const { ...rest } = props;
-  const imageClasses = classNames(
-    classes.imgRaised,
-    classes.imgRoundedCircle,
-    classes.imgFluid
-  );
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
   //State hooks
@@ -66,6 +60,7 @@ export default function ProfilePage(props) {
 
   //handling the submit of contactform with some firebase
   const handleSubmit = () => {
+    if (regex.test(contactEmail)) {
     db.collection("texts")
       .add({
         timestamp: firebase.firestore.Timestamp.now(),
@@ -98,13 +93,24 @@ export default function ProfilePage(props) {
           progress: undefined,
         });
       });
+    } else {
+      toast.error("Please enter at least your email", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   };
 
   return (
     <div>
       <Header
         color="transparent"
-        brand="Material Kit React"
+        brand="Brian Angulo"
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
