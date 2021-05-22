@@ -6,3 +6,5 @@ config.js
 src/assets/.DS_Store
 build
 .DS_Store
+src/.DS_Store
+src/assets/.DS_Store
