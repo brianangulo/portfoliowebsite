@@ -23,7 +23,7 @@ export default function HeaderLinks(props) {
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
         <Button
-          href="https://drive.google.com/file/d/1siZznkFjwmxwpFXvQhfQelMxqLb8qqJX/view?usp=sharinghttps://drive.google.com/file/d/1siZznkFjwmxwpFXvQhfQelMxqLb8qqJX/view?usp=sharing"
+          href={props.resumeLink}
           color="transparent"
           target="_blank"
           className={classes.navLink}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -54,9 +54,60 @@ export default function ProfilePage(props) {
   const [contactEmail, setContactEmail] = useState("");
   const [contactText, setContactText] = useState("");
   const [emailValidator, setEmailValidator] = useState(false);
+  const [resumeLink, setResumeLink] = useState("https://www.brianangulo.com/");
+  const [skills, setSkills] = useState("Loading...");
 
   //regex email validator
   const regex = /.{1,}@[^.]{1,}/;
+
+  //Firebase colletion references
+  const resumeLinkRef = db.collection("links").doc("resume");
+  const skillsRef = db.collection("bio").doc("skillset");
+
+  // Handler used to get links and skill descriptions from firebase
+  const handleGetData = () => {
+    resumeLinkRef
+      .get()
+      .then((doc) => {
+        setResumeLink(doc.data().link);
+      })
+      .catch((err) => {
+        toast.error(`Error encountered, ${err}`, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+
+    skillsRef
+        .get()
+        .then((doc) => {
+          setSkills(doc.data().skills);
+        })
+        .catch((err) => {
+          toast.error(`Error encountered, ${err}`, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
+  }
+
+  //Getting the data from FB on mount
+  useEffect(
+    ()=> {
+      handleGetData();
+    }
+    , []
+  )
 
   //handling the submit of contactform with some firebase
   const handleSubmit = () => {
@@ -111,7 +162,7 @@ export default function ProfilePage(props) {
       <Header
         color="transparent"
         brand="Brian Angulo"
-        rightLinks={<HeaderLinks />}
+        rightLinks={<HeaderLinks resumeLink={resumeLink} />}
         fixed
         changeColorOnScroll={{
           height: 200,
@@ -178,9 +229,7 @@ export default function ProfilePage(props) {
                 web and mobile development. Notable skills:{" "}
                 <span style={{ fontWeight: "bold" }}>
                   {" "}
-                  JavaScript, HTML, CSS, SCSS, SASS, BootStrap, TailWind CSS,
-                  Material UI, React Native, React.js, Node.js, Firebase &
-                  Firestore, MongoDB, Wordpress, and PHP with Laravel.
+                  {skills}
                 </span>{" "}
               </p>
             </div>
