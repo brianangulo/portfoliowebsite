@@ -25,9 +25,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 //Projects screenshots
-import ebank from "assets/img/projects/ebank.png";
-import gpu from "assets/img/projects/gpu.png";
-import brute from "assets/img/projects/bf.png";
+import ebank from "assets/img/projects/ebank.jpg";
+import gpu from "assets/img/projects/gpu.jpg";
+import brute from "assets/img/projects/bf.jpg";
 
 //Hovering library
 import { AnimationWrapper } from "react-hover-animation";
