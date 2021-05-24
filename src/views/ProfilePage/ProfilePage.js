@@ -157,7 +157,7 @@ export default function ProfilePage(props) {
       });
     }
     //Here it starts the use of my custom mailer micorservice express nodejs app
-    const fetchObj = {
+    const data = {
       email: "trucho219@gmail.com",
       subject: "Direct from my app while in dev mode",
       message: "Super tight that this message is being sent via a server I created"
@@ -165,14 +165,17 @@ export default function ProfilePage(props) {
     const url = "http://localhost:4000/mail";
     fetch(url, {
       method: "POST",
+      mode: "cors",
       headers: {
-        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(fetchObj),
-    }).then((res)=> {
-      console.log(res.json())
-    }).catch(console.error);
-
+      body: JSON.stringify(data),
+    }).then((res) => {
+        res;
+      }).then((res) => {
+        console.log(res);
+      }).catch(console.error);
   };
 
   return (
