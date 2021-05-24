@@ -57,16 +57,25 @@ export default function ProfilePage(props) {
   const [emailValidator, setEmailValidator] = useState(false);
   const [resumeLink, setResumeLink] = useState("https://www.brianangulo.com/");
   const [skills, setSkills] = useState("Loading...");
+  const [mailerURL, setMailerUrl] = useState("");
 
   //regex email validator
   const regex = /.{1,}@[^.]{1,}/;
 
-  //Firebase colletion references
+  //Firebase colletion & docs references
   const resumeLinkRef = db.collection("links").doc("resume");
   const skillsRef = db.collection("bio").doc("skillset");
+  const url = db.collection("url").doc("url");
 
   // Handler used to get links and skill descriptions from firebase
   const handleGetData = () => {
+    //Getting the url from firestore in case i want to modify
+    url.get().then(
+      (doc) => {
+        setMailerUrl(doc.data().url)
+      }
+    ).catch(console.error);
+      //Getting updated resumelink from firestore
     resumeLinkRef
       .get()
       .then((doc) => {
@@ -83,60 +92,15 @@ export default function ProfilePage(props) {
           progress: undefined,
         });
       });
-
+      //getting skills from firestore in case i want to update them
     skillsRef
-        .get()
-        .then((doc) => {
-          setSkills(doc.data().skills);
-        })
-        .catch((err) => {
-          toast.error(`Error encountered, ${err}`, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        });
-  }
-
-  //Getting the data from FB on mount
-  useEffect(
-    ()=> {
-      handleGetData();
-    }
-    , []
-  )
-
-  //handling the submit of contactform with some firebase
-  const handleSubmit = () => {
-    if (regex.test(contactEmail)) {
-    db.collection("texts")
-      .add({
-        timestamp: firebase.firestore.Timestamp.now(),
-        name: contactName,
-        email: contactEmail,
-        text: contactText,
+      .get()
+      .then((doc) => {
+        setSkills(doc.data().skills);
       })
-      .then(() => {
-        toast.warn("Form submitted!", {
-          position: "bottom-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-        });
-        setContactName("");
-        setContactEmail("");
-        setContactText("");
-      })
-      .catch((error) => {
-        toast.error(`Error encountered, ${error}`, {
-          position: "bottom-left",
+      .catch((err) => {
+        toast.error(`Error encountered, ${err}`, {
+          position: "bottom-right",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -145,6 +109,74 @@ export default function ProfilePage(props) {
           progress: undefined,
         });
       });
+  };
+
+  //APi post call to send mailing information. Here it 
+  //starts the use of my custom mailer micorservice express nodejs app
+  //Very important the way that parameters are passed is 
+  //message first then email then fetch url
+  const sendMail = (message, email, url, name) => {
+    const data = {
+      email: `bangulo219@gmail.com, ${email}`,
+      subject: "Thank you for Contacting me - Brian Angulo",
+      message: `Thank you for contacting me ${name}. Your email is very important to me and I will respond to it as soon as possible. 
+      Feel free to reply all to this email if you have anything to add.
+        The following is the message you sent me: ${message}
+      `,
+    };
+    fetch(url, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).catch(console.error);
+  };
+
+  //Getting the data from FB on mount
+  useEffect(() => {
+    handleGetData();
+  }, []);
+
+  //handling the submit of contactform with some firebase
+  const handleSubmit = () => {
+    if (regex.test(contactEmail)) {
+      db.collection("texts")
+        .add({
+          timestamp: firebase.firestore.Timestamp.now(),
+          name: contactName,
+          email: contactEmail,
+          text: contactText,
+        })
+        .then(() => {
+          toast.warn("Form submitted!", {
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+          });
+          setContactName("");
+          setContactEmail("");
+          setContactText("");
+        })
+        .catch((error) => {
+          toast.error(`Error encountered, ${error}`, {
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
+      //Sending info to my own expressmailer api
+      sendMail(contactText, contactEmail, mailerURL, contactName);
     } else {
       toast.error("Please enter at least your email", {
         position: "bottom-left",
@@ -156,26 +188,6 @@ export default function ProfilePage(props) {
         progress: undefined,
       });
     }
-    //Here it starts the use of my custom mailer micorservice express nodejs app
-    const data = {
-      email: "trucho219@gmail.com",
-      subject: "Direct from my app while in dev mode",
-      message: "Super tight that this message is being sent via a server I created"
-    };
-    const url = "http://localhost:4000/mail";
-    fetch(url, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data),
-    }).then((res) => {
-        res;
-      }).then((res) => {
-        console.log(res);
-      }).catch(console.error);
   };
 
   return (
@@ -248,10 +260,7 @@ export default function ProfilePage(props) {
               <p>
                 Resourceful and seasoned developer with a strong foundation in
                 web and mobile development. Notable skills:{" "}
-                <span style={{ fontWeight: "bold" }}>
-                  {" "}
-                  {skills}
-                </span>{" "}
+                <span style={{ fontWeight: "bold" }}> {skills}</span>{" "}
               </p>
             </div>
             <GridContainer justify="center">
