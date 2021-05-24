@@ -33,8 +33,6 @@
   <p align="center">
     This is my personal portfolio website
     <br />
-    <a href="https://github.com/brianangulo/portfoliowebsite"><strong>Explore the docs »</strong></a>
-    <br />
     <br />
     <a href="https://www.brianangulo.com/">View Live</a>
     ·
