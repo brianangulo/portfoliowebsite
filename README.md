@@ -36,7 +36,7 @@
     <a href="https://github.com/brianangulo/portfoliowebsite"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/brianangulo/portfoliowebsite">View Demo</a>
+    <a href="https://www.brianangulo.com/">View Live</a>
     ·
     <a href="https://github.com/brianangulo/portfoliowebsite/issues">Report Bug</a>
     ·
