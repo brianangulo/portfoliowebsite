@@ -41,6 +41,7 @@ import "firebase/analytics";
 
 //material styles
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
+import { PostAdd } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -121,7 +122,7 @@ export default function ProfilePage(props) {
       })
       .then(() => {
         toast.warn("Form submitted!", {
-          position: "bottom-right",
+          position: "bottom-left",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -135,7 +136,7 @@ export default function ProfilePage(props) {
       })
       .catch((error) => {
         toast.error(`Error encountered, ${error}`, {
-          position: "bottom-right",
+          position: "bottom-left",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -146,7 +147,7 @@ export default function ProfilePage(props) {
       });
     } else {
       toast.error("Please enter at least your email", {
-        position: "bottom-right",
+        position: "bottom-left",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -155,6 +156,23 @@ export default function ProfilePage(props) {
         progress: undefined,
       });
     }
+    //Here it starts the use of my custom mailer micorservice express nodejs app
+    const fetchObj = {
+      email: "trucho219@gmail.com",
+      subject: "Direct from my app while in dev mode",
+      message: "Super tight that this message is being sent via a server I created"
+    };
+    const url = "http://localhost:4000/mail";
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fetchObj),
+    }).then((res)=> {
+      console.log(res.json())
+    }).catch(console.error);
+
   };
 
   return (
